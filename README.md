@@ -1,6 +1,6 @@
 [![NPM](https://nodei.co/npm/jsx-marker.png)](https://nodei.co/npm/jsx-marker/)
 
-# JSX Marker
+# Getting Started
 
 JSX Marker is a versatile React component for styling text based on custom patterns and matchers. With JSX Marker, you can easily apply styling to specific portion of the text within your React applications.
 

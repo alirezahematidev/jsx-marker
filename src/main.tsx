@@ -1,70 +1,35 @@
-import { Fragment, cloneElement } from "react";
-
-type Matcher = JSX.Element | ((match: string) => JSX.Element);
-
-interface MatcherObject {
-  [key: string]: Matcher;
-}
+import { Fragment, ReactHTML, createElement } from "react";
+import { mark, type MatcherObject } from "./core";
 
 interface MarkerProps {
+  /**
+   * The text content to be marked.
+   */
   text: string;
-  nonMatchElement?: JSX.Element;
+  /**
+   * Matchers to define patterns and corresponding React elements for styling.
+   * Can be an object or a function that returns an object.
+   */
   matchers: MatcherObject | ((input: string) => MatcherObject);
+  /**
+   * A React element to render for non-matching characters.
+   */
+  nonMatchElement?: JSX.Element;
+  /**
+   * Optional HTML tag to use as the wrapper element for the styled text.
+   * @default Fragment
+   */
+  wrapperElementTag?: keyof ReactHTML;
 }
 
-function parseMatchers(matchers: MatcherObject | ((input: string) => MatcherObject), text: string): MatcherObject {
-  const parsedMatchers: MatcherObject = {};
-  const matcherObject = typeof matchers === "function" ? matchers(text) : matchers;
+const Marker = (props: MarkerProps) => {
+  const { text, matchers, nonMatchElement, wrapperElementTag } = props;
 
-  for (const key in matcherObject) {
-    if (key.endsWith("$")) {
-      const char = key.slice(0, -1);
-      const chunks = text.split(char);
-      const concatenatedChunks = chunks.slice(0, -1).map((chunk) => chunk + char);
-      concatenatedChunks.forEach((cc) => (parsedMatchers[cc] = matcherObject[key]));
-    } else if (key.startsWith("^")) {
-      const char = key.slice(1);
-      const chunks = text.split(char);
-      const concatenatedChunks = chunks.slice(1).map((chunk) => char + chunk);
-      concatenatedChunks.forEach((cc) => (parsedMatchers[cc] = matcherObject[key]));
-    } else {
-      parsedMatchers[key] = matcherObject[key];
-    }
-  }
-  return parsedMatchers;
-}
+  const styledText = mark(text, matchers, nonMatchElement);
 
-function tryWrap(input: string, wrapper: JSX.Element | undefined, key: string) {
-  if (!wrapper) return input;
-  return cloneElement(wrapper, { key }, input);
-}
+  if (wrapperElementTag) return createElement(wrapperElementTag, { children: styledText });
 
-function mark({ matchers, nonMatchElement, text }: MarkerProps) {
-  const parsedMatchers = parseMatchers(matchers, text);
-  const pattern = new RegExp(Object.keys(parsedMatchers).join("|"), "g");
-  const matches = text.matchAll(pattern);
-  let currentIndex = 0;
-  const result = [];
-
-  for (const match of matches) {
-    const currentMatch = match[0];
-    const matchIndex = match.index!;
-    const wrapper = parsedMatchers[currentMatch];
-    const chunk = text.substring(currentIndex, matchIndex);
-    if (chunk) result.push(tryWrap(chunk, nonMatchElement, `non-match-${currentIndex}`));
-    const jsx = typeof wrapper === "function" ? wrapper(currentMatch) : wrapper;
-    result.push(cloneElement(jsx, { key: `match-${matchIndex}` }, currentMatch));
-    currentIndex = matchIndex + currentMatch.length;
-  }
-
-  const remainingChunk = text.substring(currentIndex);
-  if (remainingChunk) result.push(tryWrap(remainingChunk, nonMatchElement, `non-match-${currentIndex}`));
-
-  return result;
-}
-
-const Marker = ({ matchers, nonMatchElement, text }: MarkerProps) => {
-  return <Fragment>{mark({ text, matchers, nonMatchElement })}</Fragment>;
+  return <Fragment>{styledText}</Fragment>;
 };
 
 export { Marker };
