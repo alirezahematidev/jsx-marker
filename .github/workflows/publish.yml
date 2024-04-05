@@ -33,8 +33,6 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - run: npm ci
-
       - name: Publish package
         run: npm publish
         env:
