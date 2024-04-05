@@ -2,6 +2,7 @@ import { release } from "@vitejs/release-scripts";
 import semver from "semver";
 import type { Options as ExecaOptions, ExecaReturnValue } from "execa";
 import { execa } from "execa";
+import path from "path";
 
 export async function run(bin: string, args: string[], opts: ExecaOptions = {}): Promise<ExecaReturnValue> {
   return execa(bin, args, { stdio: "inherit", ...opts });
@@ -24,6 +25,7 @@ export async function logRecentCommits(): Promise<void> {
 release({
   repo: "jsx-marker",
   packages: ["jsx-marker"],
+  getPkgDir: () => path.resolve(process.cwd()),
   toTag: (_, version) => `v${version}`,
   logChangelog: () => logRecentCommits(),
   generateChangelog: async () => {
