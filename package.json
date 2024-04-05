@@ -20,6 +20,9 @@
   "bugs": {
     "url": "https://github.com/alirezahematidev/jsx-marker/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://github.com/alirezahematidev/jsx-marker#readme",
   "main": "./dist/jsx-marker.js",
   "module": "./dist/jsx-marker.cjs",
