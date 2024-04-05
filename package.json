@@ -13,6 +13,14 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alirezahematidev/jsx-marker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alirezahematidev/jsx-marker/issues"
+  },
+  "homepage": "https://github.com/alirezahematidev/jsx-marker#readme",
   "main": "./dist/jsx-marker.js",
   "module": "./dist/jsx-marker.cjs",
   "types": "./dist/main.d.ts",
