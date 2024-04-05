@@ -2,7 +2,7 @@
 
 # JSX Marker
 
-Welcome to our date picker for React applications! This package offers a customizable and localized solution for selecting dates in your projects. With support for the Jalaali calendar system, our date picker allows you to easily implement date selection in your React projects, whether you need to select a single date, or range of dates. Get started now by installing the package and integrating it into your React code.
+JSX Marker is a versatile React component for styling text based on custom patterns and matchers. With JSX Marker, you can easily apply styling to specific portion of the text within your React applications.
 
 [![Version][version-badge]][package]
 [![NPM Downloads][dw-badge]][package]
@@ -13,7 +13,7 @@ Welcome to our date picker for React applications! This package offers a customi
 
 ## Installation
 
-To install jsx-marker, you will need to have [npm](https://npmjs.com) or [yarn](https://yarnpkg.com) installed on your system. Once you have one of these package managers set up, you can install jsx-marker by running the following command:
+To install jsx-marker, you will need to have [npm](https://npmjs.com), [yarn](https://yarnpkg.com) or [pnpm](https://pnpm.io) installed on your system. Once you have one of these package managers set up, you can install jsx-marker by running the following command:
 
 ```bash
   npm install --save jsx-marker
@@ -31,7 +31,7 @@ This will install the latest version of jsx-marker and add it as a dependency to
 
 ## Usage/Examples
 
-```javascript
+```jsx
 import { Marker } from "jsx-marker";
 
 function App() {
