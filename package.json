@@ -11,7 +11,9 @@
     "highlight"
   ],
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "repository": {
     "type": "git",
