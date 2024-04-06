@@ -1,4 +1,4 @@
-import { Marker } from "../../../src/main";
+import { Marker } from "jsx-marker";
 
 function App() {
   return (
@@ -8,6 +8,8 @@ function App() {
       <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "*d": <span style={{ color: "red" }} /> }} />
 
       <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "d*": <span style={{ color: "red" }} /> }} />
+
+      <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "[b,f]": <span style={{ color: "red" }} /> }} />
 
       <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "*": <span style={{ color: "red" }} /> }} />
     </>
