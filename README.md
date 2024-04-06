@@ -35,7 +35,24 @@ This will install the latest version of jsx-marker and add it as a dependency to
 import { Marker } from "jsx-marker";
 
 function App() {
-  return <Marker text="abcdef" matchers={{cd: <span style={{color:"red"}} />}} />;
+  return (
+    <>
+      {/* matches d character */}
+      <Marker text="abcdef" matchers={{d: <span style={{color:"red"}} />}} />
+
+      {/* matches portion of the text which starts with d */}
+      <Marker text="abcdef" matchers={{"d*": <span style={{color:"red"}} />}} />
+
+      {/* matches portion of the text which ends with d */}
+      <Marker text="abcdef" matchers={{"*d": <span style={{color:"red"}} />}} />
+
+      {/* matches all the text */}
+      <Marker text="abcdef" matchers={{"*": <span style={{color:"red"}} />}} />
+
+      {/* also matches all the text if the text contains the <char> */}
+      <Marker text="abcdef" matchers={{"*<char>*": <span style={{color:"red"}} />}} />
+    </>
+  )
 }
 ```
 
