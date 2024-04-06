@@ -1,5 +1,6 @@
 import { Fragment, ReactHTML, createElement } from "react";
-import { mark, type MatcherObject } from "./core";
+import { type MatcherObject } from "./core/types";
+import { styled } from "./core/styled";
 
 interface MarkerProps {
   /**
@@ -25,7 +26,7 @@ interface MarkerProps {
 const Marker = (props: MarkerProps) => {
   const { text, matchers, nonMatchElement, wrapperElementTag } = props;
 
-  const styledText = mark(text, matchers, nonMatchElement);
+  const styledText = styled(text, matchers, nonMatchElement);
 
   if (wrapperElementTag) return createElement(wrapperElementTag, { children: styledText });
 
