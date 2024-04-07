@@ -1,4 +1,4 @@
-import { Fragment, cloneElement, useEffect } from "react";
+import { Fragment, cloneElement } from "react";
 import { CustomMatcher, type MatcherObject } from "./core/types";
 import styled from "./core/styled";
 
@@ -22,6 +22,9 @@ interface MarkerProps {
    */
   wrapperElement?: JSX.Element | ((parts: (string | React.FunctionComponentElement<any>)[]) => JSX.Element);
 
+  /**
+   * Custom matchers which can be used in matchers object using `@` syntax
+   */
   custom?: CustomMatcher;
 }
 
