@@ -1,6 +1,6 @@
-import { Fragment, ReactHTML, createElement } from "react";
+import { Fragment, cloneElement } from "react";
 import { type MatcherObject } from "./core/types";
-import { styled } from "./core/styled";
+import styled from "./core/styled";
 
 interface MarkerProps {
   /**
@@ -20,15 +20,23 @@ interface MarkerProps {
    * Optional HTML tag to use as the wrapper element for the styled text.
    * @default Fragment
    */
-  wrapperElementTag?: keyof ReactHTML;
+  wrapperElement?: JSX.Element | ((parts: (string | React.FunctionComponentElement<any>)[]) => JSX.Element);
+
+  custom?: {
+    [key: string]: string | RegExp;
+  };
 }
 
 const Marker = (props: MarkerProps) => {
-  const { text, matchers, nonMatchElement, wrapperElementTag } = props;
+  const { text, matchers, nonMatchElement, wrapperElement, custom } = props;
 
-  const styledText = styled(text, matchers, nonMatchElement);
+  const styledText = styled(text, matchers, nonMatchElement, custom);
 
-  if (wrapperElementTag) return createElement(wrapperElementTag, { children: styledText });
+  if (wrapperElement) {
+    if (typeof wrapperElement === "function") return wrapperElement(styledText);
+
+    return cloneElement(wrapperElement, {}, styledText);
+  }
 
   return <Fragment>{styledText}</Fragment>;
 };

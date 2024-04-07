@@ -6,7 +6,7 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "jsx-marker": "latest",
+    "jsx-marker": "^0.0.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

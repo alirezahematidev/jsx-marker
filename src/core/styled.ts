@@ -3,8 +3,13 @@ import { parse } from "./parser";
 import type { MatcherObject } from "./types";
 import { tryWrap } from "./utils";
 
-export function styled(text: string, matchers: MatcherObject | ((input: string) => MatcherObject), nonMatchElement?: JSX.Element) {
-  const parsedMatchers = parse(matchers, text);
+function styled(
+  text: string,
+  matchers: MatcherObject | ((input: string) => MatcherObject),
+  nonMatchElement?: JSX.Element,
+  custom?: Record<string, string | RegExp>
+) {
+  const parsedMatchers = parse(matchers, text, custom);
 
   const pattern = new RegExp(Object.keys(parsedMatchers).join("|"), "g");
 
@@ -29,7 +34,7 @@ export function styled(text: string, matchers: MatcherObject | ((input: string) 
 
     const jsx = typeof wrapper === "function" ? wrapper(currentMatch) : wrapper;
 
-    result.push(cloneElement(jsx, { key: `match-${matchIndex}` }, currentMatch));
+    result.push(cloneElement(jsx, { key: `match-${matchIndex}` }, jsx.props?.children ?? currentMatch));
 
     currentIndex = matchIndex + currentMatch.length;
   }
@@ -40,3 +45,5 @@ export function styled(text: string, matchers: MatcherObject | ((input: string) 
 
   return result;
 }
+
+export default styled;

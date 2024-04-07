@@ -1,17 +1,15 @@
-import { Marker } from "jsx-marker";
+import { Marker } from "../../../src/main";
 
 function App() {
   return (
     <>
-      <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ d: <span style={{ color: "red" }} /> }} />
-
-      <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "*d": <span style={{ color: "red" }} /> }} />
-
-      <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "d*": <span style={{ color: "red" }} /> }} />
-
-      <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "[b,f]": <span style={{ color: "red" }} /> }} />
-
-      <Marker text="abcdefgh" wrapperElementTag="div" matchers={{ "*": <span style={{ color: "red" }} /> }} />
+      <Marker
+        text="aaaahttp://google.combbbb"
+        custom={{ link: /http:\/\/google.com/g }}
+        matchers={{
+          "@link": <span style={{ color: "red" }} />,
+        }}
+      />
     </>
   );
 }

@@ -1258,10 +1258,10 @@ json5@^2.2.3:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
-jsx-marker@latest:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/jsx-marker/-/jsx-marker-0.0.7.tgz#f1f3e7af7a998a51f9a8c61d960c47ca0572dc73"
-  integrity sha512-cNgrNyBthQp+Z0jCscCUoIeEOjbhSf5jVcKspjRJa/U/oTtMbo20VMlC2Gb8I5jDApk4wC+ne1VqFBoqbwyR3Q==
+jsx-marker@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/jsx-marker/-/jsx-marker-0.0.9.tgz#268d45c62ae816ae9ec7a28e437af2dd90ff9254"
+  integrity sha512-tWXO2fAo11+lR61KixeR9cd2lSMwfCD/ANTn7YOx3f3Ap+aFqGKAuk17VxfJgqEYh26Q5uhTrkbZDa9XRgAgLA==
   dependencies:
     react "^18.2.0"
     react-dom "^18.2.0"

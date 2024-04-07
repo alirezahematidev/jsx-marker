@@ -1,12 +1,14 @@
 import { cloneElement } from "react";
-import { AsteriskPos } from "./types";
+import { Modifier } from "./types";
 
-export function getAsteriskPos(input: string): AsteriskPos {
-  if (/^\*(.*)+\*$/g.test(input)) return AsteriskPos.BOTH;
-  if (input.startsWith("*")) return AsteriskPos.END;
-  if (input.endsWith("*")) return AsteriskPos.START;
+export function getModifier(input: string): Modifier {
+  if (input.startsWith("@")) return Modifier.CUSTOM;
 
-  return AsteriskPos.NONE;
+  if (/^\*(.*)+\*$/g.test(input)) return Modifier.ASTERISK_BOTH;
+  if (input.startsWith("*")) return Modifier.ASTERISK_END;
+  if (input.endsWith("*")) return Modifier.ASTERISK_START;
+
+  return Modifier.NONE;
 }
 
 export function tryWrap(input: string, wrapper: JSX.Element | undefined, key: string) {
