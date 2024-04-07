@@ -1,13 +1,13 @@
 import { cloneElement } from "react";
 import { parse } from "./parser";
-import type { MatcherObject } from "./types";
+import type { CustomMatcher, MatcherObject } from "./types";
 import { tryWrap } from "./utils";
 
 function styled(
   text: string,
   matchers: MatcherObject | ((input: string) => MatcherObject),
   nonMatchElement?: JSX.Element,
-  custom?: Record<string, string | RegExp>
+  custom?: CustomMatcher
 ) {
   const parsedMatchers = parse(matchers, text, custom);
 

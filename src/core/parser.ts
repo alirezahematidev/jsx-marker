@@ -1,10 +1,10 @@
-import { Modifier, MatcherObject } from "./types";
+import { Modifier, MatcherObject, CustomMatcher } from "./types";
 import { getModifier } from "./utils";
 
 export function parse(
   matchers: MatcherObject | ((input: string) => MatcherObject),
   text: string,
-  custom: Record<string, string | RegExp> = {}
+  custom: CustomMatcher = {}
 ): MatcherObject {
   const parsedMatchers: MatcherObject = {};
   const matcherObject = typeof matchers === "function" ? matchers(text) : matchers;
@@ -13,18 +13,19 @@ export function parse(
     let matchedKey = matcherKey;
 
     switch (getModifier(matcherKey)) {
-      case Modifier.CUSTOM:
+      case Modifier.AT_SIGN:
         {
           const name = matcherKey.slice(1);
 
-          const customValue = custom[name];
+          let customValue = custom[name];
 
-          if (!customValue) continue;
+          if (!customValue) break;
 
           if (customValue instanceof RegExp) {
             const match = text.match(customValue);
 
             if (match && match[0]) matchedKey = match[0];
+            else continue;
           } else {
             matchedKey = customValue;
           }
@@ -51,31 +52,61 @@ export function parse(
       case Modifier.ASTERISK_BOTH:
         if (text.includes(matcherKey.replace(/^\*?([^*]+)\*?$/g, "$1"))) matchedKey = text;
         break;
-      default: {
-        if (!/^\[(.*)+\]$/g.test(matcherKey.slice())) break;
 
-        const chunks = /^\[(.*)\s?,\s?(.*)\]$/g.exec(matcherKey);
+      case Modifier.BRACKET_CLOSE:
+        {
+          const chunks = /^\[(.*)\s?,\s?(.*)\]$/g.exec(matcherKey);
 
-        if (!chunks) break;
+          if (!chunks) break;
 
-        const rangeStart = chunks[1].trim();
-        const rangeEnd = chunks[2].trim();
+          const rangeStart = chunks[1].trim();
+          const rangeEnd = chunks[2].trim();
 
-        if (rangeStart === rangeEnd) {
-          parsedMatchers[rangeStart] = matcherObject[matcherKey];
-          break;
+          if (rangeStart === rangeEnd) {
+            parsedMatchers[rangeStart] = matcherObject[matcherKey];
+            break;
+          }
+
+          let tuple = [rangeStart, rangeEnd];
+
+          if (text.indexOf(rangeStart) > text.indexOf(rangeEnd)) tuple = [rangeEnd, rangeStart];
+
+          if (!tuple.every((key) => !!key && text.includes(key.replace(/^\*?([^*]+)\*?$/g, "$1")))) break;
+
+          const match = text.match(new RegExp(`${tuple[0]}(.*)${tuple[1]}`, "g"));
+
+          if (match && match[0]) matchedKey = match[0];
         }
+        break;
+      case Modifier.BRACKET_OPEN:
+        {
+          const chunks = /^\((.*)\s?,\s?(.*)\)$/g.exec(matcherKey);
 
-        let tuple = [rangeStart, rangeEnd];
+          if (!chunks) break;
 
-        if (text.indexOf(rangeStart) > text.indexOf(rangeEnd)) tuple = [rangeEnd, rangeStart];
+          const rangeStart = chunks[1].trim();
+          const rangeEnd = chunks[2].trim();
 
-        if (!tuple.every((key) => !!key && text.includes(key.replace(/^\*?([^*]+)\*?$/g, "$1")))) break;
+          if (rangeStart === rangeEnd) {
+            parsedMatchers[rangeStart] = matcherObject[matcherKey];
+            break;
+          }
 
-        const match = text.match(new RegExp(`${tuple[0]}(.*)${tuple[1]}`, "g"));
+          let tuple = [rangeStart, rangeEnd];
 
-        if (match && match[0]) matchedKey = match[0];
-      }
+          if (text.indexOf(rangeStart) > text.indexOf(rangeEnd)) tuple = [rangeEnd, rangeStart];
+
+          if (!tuple.every((key) => !!key && text.includes(key.replace(/^\*?([^*]+)\*?$/g, "$1")))) break;
+
+          const match = new RegExp(`${tuple[0]}([^${tuple[1]}]+)${tuple[1]}`, "g").exec(text);
+
+          if (match && match.length > 1) matchedKey = match[1];
+        }
+        break;
+
+      case Modifier.NONE:
+      default:
+        break;
     }
     parsedMatchers[matchedKey] = matcherObject[matcherKey];
   }

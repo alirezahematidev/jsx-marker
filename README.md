@@ -46,14 +46,21 @@ function App() {
       {/* Matches portions of the text which ends with 'd' */}
       <Marker text="abcdef" matchers={{"*d": <span style={{color:"red"}} />}} />
 
-      {/* Matches portions of the text between 'b' and 'f' */}
-      <Marker text="abcdefgh" matchers={{ "[b,f]": <span style={{ color: "red" }} /> }} />
+      {/* Matches portions of the text between 'b' and 'f'. */}
+      <Marker text="abcdef" matchers={{ "(b,f)": <span style={{ color: "red" }} /> }} />
+
+      {/* Matches portions of the text between 'b' and 'f' including 'b' and 'f' */}
+      <Marker text="abcdef" matchers={{ "[b,f]": <span style={{ color: "red" }} /> }} />
+
+      {/* Define custom matchers and link them into matchers object using @ */}
+      <Marker text="abcdef" custom={{ middle: /cd/g }} matchers={{ "@middle": <span style={{ color: "red" }} /> }} />
 
       {/* Matches all of the text */}
       <Marker text="abcdef" matchers={{"*": <span style={{color:"red"}} />}} />
 
       {/* Also matches all of the text if the text contains the <char> */}
       <Marker text="abcdef" matchers={{"*<char>*": <span style={{color:"red"}} />}} />
+
     </>
   )
 }

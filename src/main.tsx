@@ -1,5 +1,5 @@
-import { Fragment, cloneElement } from "react";
-import { type MatcherObject } from "./core/types";
+import { Fragment, cloneElement, useEffect } from "react";
+import { CustomMatcher, type MatcherObject } from "./core/types";
 import styled from "./core/styled";
 
 interface MarkerProps {
@@ -22,9 +22,7 @@ interface MarkerProps {
    */
   wrapperElement?: JSX.Element | ((parts: (string | React.FunctionComponentElement<any>)[]) => JSX.Element);
 
-  custom?: {
-    [key: string]: string | RegExp;
-  };
+  custom?: CustomMatcher;
 }
 
 const Marker = (props: MarkerProps) => {
