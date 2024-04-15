@@ -1,4 +1,4 @@
-type Matcher = JSX.Element | ((match: string) => JSX.Element);
+type Matcher = JSX.Element | ((...matches: string[]) => JSX.Element);
 
 export interface MatcherObject {
   [key: string]: Matcher;

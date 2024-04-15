@@ -1,11 +1,14 @@
 import { Modifier, MatcherObject, CustomMatcher } from "./types";
 import { getModifier } from "./utils";
 
-export function parse(
-  matchers: MatcherObject | ((input: string) => MatcherObject),
-  text: string,
-  custom: CustomMatcher = {}
-): MatcherObject {
+interface ParseResult {
+  parsedMatchers: MatcherObject;
+  matchInputs: string[];
+}
+
+export function parse(matchers: MatcherObject | ((input: string) => MatcherObject), text: string, custom: CustomMatcher = {}): ParseResult {
+  let matchInputs: string[] = [];
+
   const parsedMatchers: MatcherObject = {};
   const matcherObject = typeof matchers === "function" ? matchers(text) : matchers;
 
@@ -24,8 +27,13 @@ export function parse(
           if (customValue instanceof RegExp) {
             const match = text.match(customValue);
 
-            if (match && match[0]) matchedKey = match[0];
-            else continue;
+            if (match) {
+              const [current, ...rest] = match;
+
+              if (current) matchedKey = current;
+
+              matchInputs = rest.filter(Boolean);
+            } else continue;
           } else {
             matchedKey = customValue;
           }
@@ -37,7 +45,13 @@ export function parse(
 
           const match = text.match(new RegExp(`${char}(.*)`, "g"));
 
-          if (match && match[0]) matchedKey = match[0];
+          if (match) {
+            const [current, ...rest] = match;
+
+            if (current) matchedKey = current;
+
+            matchInputs = rest.filter(Boolean);
+          }
         }
         break;
       case Modifier.ASTERISK_END:
@@ -46,7 +60,13 @@ export function parse(
 
           const match = text.match(new RegExp(`(.*)${char}`, "g"));
 
-          if (match && match[0]) matchedKey = match[0];
+          if (match) {
+            const [current, ...rest] = match;
+
+            if (current) matchedKey = current;
+
+            matchInputs = rest.filter(Boolean);
+          }
         }
         break;
       case Modifier.ASTERISK_BOTH:
@@ -75,7 +95,13 @@ export function parse(
 
           const match = text.match(new RegExp(`${tuple[0]}(.*)${tuple[1]}`, "g"));
 
-          if (match && match[0]) matchedKey = match[0];
+          if (match) {
+            const [current, ...rest] = match;
+
+            if (current) matchedKey = current;
+
+            matchInputs = rest.filter(Boolean);
+          }
         }
         break;
       case Modifier.BRACKET_OPEN:
@@ -100,7 +126,13 @@ export function parse(
 
           const match = new RegExp(`${tuple[0]}([^${tuple[1]}]+)${tuple[1]}`, "g").exec(text);
 
-          if (match && match.length > 1) matchedKey = match[1];
+          if (match && match.length > 1) {
+            const [_, current, ...rest] = match;
+
+            if (current) matchedKey = current;
+
+            matchInputs = rest.filter(Boolean);
+          }
         }
         break;
 
@@ -111,5 +143,5 @@ export function parse(
     parsedMatchers[matchedKey] = matcherObject[matcherKey];
   }
 
-  return parsedMatchers;
+  return { parsedMatchers, matchInputs };
 }

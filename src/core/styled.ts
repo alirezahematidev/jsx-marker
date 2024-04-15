@@ -5,11 +5,11 @@ import { tryWrap } from "./utils";
 
 function styled(
   text: string,
-  matchers: MatcherObject | ((input: string) => MatcherObject),
+  matchers: MatcherObject | ((text: string) => MatcherObject),
   nonMatchElement?: JSX.Element,
   custom?: CustomMatcher
 ) {
-  const parsedMatchers = parse(matchers, text, custom);
+  const { parsedMatchers, matchInputs } = parse(matchers, text, custom);
 
   const pattern = new RegExp(Object.keys(parsedMatchers).join("|"), "g");
 
@@ -20,7 +20,7 @@ function styled(
   const result = [];
 
   for (const match of matches) {
-    const currentMatch = match[0];
+    const [currentMatch] = match;
 
     if (!currentMatch) continue;
 
@@ -32,7 +32,7 @@ function styled(
 
     if (chunk) result.push(tryWrap(chunk, nonMatchElement, `non-match-${currentIndex}`));
 
-    const jsx = typeof wrapper === "function" ? wrapper(currentMatch) : wrapper;
+    const jsx = typeof wrapper === "function" ? wrapper(currentMatch, ...matchInputs) : wrapper;
 
     result.push(cloneElement(jsx, { key: `match-${matchIndex}` }, jsx.props?.children ?? currentMatch));
 
