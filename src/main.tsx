@@ -2,7 +2,7 @@ import { Fragment, cloneElement } from "react";
 import { CustomMatcher, type MatcherObject } from "./core/types";
 import styled from "./core/styled";
 
-interface MarkerProps {
+interface MarkerProps<Custom extends CustomMatcher> {
   /**
    * The text content to be marked.
    */
@@ -11,7 +11,7 @@ interface MarkerProps {
    * Matchers to define patterns and corresponding React elements for styling.
    * Can be an object or a function that returns an object.
    */
-  matchers: MatcherObject | ((input: string) => MatcherObject);
+  matchers: MatcherObject<Custom> | ((input: string) => MatcherObject<Custom>);
   /**
    * A React element to render for non-matching characters.
    */
@@ -25,10 +25,10 @@ interface MarkerProps {
   /**
    * Custom matchers which can be used in matchers object using `@` syntax
    */
-  custom?: CustomMatcher;
+  custom?: Custom;
 }
 
-const Marker = (props: MarkerProps) => {
+const Marker = <Custom extends CustomMatcher>(props: MarkerProps<Custom>) => {
   const { text, matchers, nonMatchElement, wrapperElement, custom } = props;
 
   const styledText = styled(text, matchers, nonMatchElement, custom);

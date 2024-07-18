@@ -1,8 +1,12 @@
 type Matcher = JSX.Element | ((...matches: string[]) => JSX.Element);
 
-export interface MatcherObject {
-  [key: string]: Matcher;
-}
+export type MatcherObject<Custom extends CustomMatcher> =
+  | {
+      [key: string]: Matcher;
+    }
+  | {
+      [key in `@${keyof Custom & string}`]: Matcher;
+    };
 
 export type CustomMatcher = {
   [key: string]: string | RegExp;

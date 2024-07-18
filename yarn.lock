@@ -755,6 +755,11 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@treekit/core@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@treekit/core/-/core-0.0.2.tgz#d58007d13d6f39f36a5d4477514bd80f3e3025ae"
+  integrity sha512-OFFn6vcWXEnSLCcBFYtLMbIE0DXJMBCUYi3mrwXdYUgYBQkt5TEdHKm+ge5dx/0HFKUqpRzggiqKA71El40L2w==
+
 "@types/argparse@1.0.38":
   version "1.0.38"
   resolved "https://registry.yarnpkg.com/@types/argparse/-/argparse-1.0.38.tgz#a81fd8606d481f873a3800c6ebae4f1d768a56a9"

@@ -1,5 +1,4 @@
-import { Marker } from "jsx-marker";
-
+import { Marker } from "../../../src/main";
 function App() {
   return (
     <>
