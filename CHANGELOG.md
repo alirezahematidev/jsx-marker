@@ -1,3 +1,7 @@
+## [0.0.12](https://github.com/alirezahematidev/jsx-marker/compare/v0.0.11...v0.0.12) (2024-07-18)
+
+
+
 ## [0.0.11](https://github.com/alirezahematidev/jsx-marker/compare/v0.0.10...v0.0.11) (2024-07-18)
 
 
