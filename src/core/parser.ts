@@ -1,15 +1,19 @@
 import { Modifier, MatcherObject, CustomMatcher } from "./types";
 import { getModifier } from "./utils";
 
-interface ParseResult {
-  parsedMatchers: MatcherObject;
+interface ParseResult<Custom extends CustomMatcher> {
+  parsedMatchers: MatcherObject<Custom>;
   matchInputs: string[];
 }
 
-export function parse(matchers: MatcherObject | ((input: string) => MatcherObject), text: string, custom: CustomMatcher = {}): ParseResult {
+export function parse<Custom extends CustomMatcher>(
+  matchers: MatcherObject<Custom> | ((input: string) => MatcherObject<Custom>),
+  text: string,
+  custom: Custom = {} as Custom
+): ParseResult<Custom> {
   let matchInputs: string[] = [];
 
-  const parsedMatchers: MatcherObject = {};
+  const parsedMatchers: MatcherObject<Custom> = {};
   const matcherObject = typeof matchers === "function" ? matchers(text) : matchers;
 
   for (const matcherKey in matcherObject) {
@@ -83,7 +87,7 @@ export function parse(matchers: MatcherObject | ((input: string) => MatcherObjec
           const rangeEnd = chunks[2].trim();
 
           if (rangeStart === rangeEnd) {
-            parsedMatchers[rangeStart] = matcherObject[matcherKey];
+            parsedMatchers[rangeStart] = matcherObject[matcherKey as keyof Custom];
             break;
           }
 
@@ -114,7 +118,7 @@ export function parse(matchers: MatcherObject | ((input: string) => MatcherObjec
           const rangeEnd = chunks[2].trim();
 
           if (rangeStart === rangeEnd) {
-            parsedMatchers[rangeStart] = matcherObject[matcherKey];
+            parsedMatchers[rangeStart] = matcherObject[matcherKey as keyof Custom];
             break;
           }
 
@@ -140,7 +144,7 @@ export function parse(matchers: MatcherObject | ((input: string) => MatcherObjec
       default:
         break;
     }
-    parsedMatchers[matchedKey] = matcherObject[matcherKey];
+    parsedMatchers[matchedKey] = matcherObject[matcherKey as keyof Custom];
   }
 
   return { parsedMatchers, matchInputs };

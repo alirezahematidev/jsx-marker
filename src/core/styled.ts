@@ -3,13 +3,13 @@ import { parse } from "./parser";
 import type { CustomMatcher, MatcherObject } from "./types";
 import { tryWrap } from "./utils";
 
-function styled(
+function styled<Custom extends CustomMatcher>(
   text: string,
-  matchers: MatcherObject | ((text: string) => MatcherObject),
+  matchers: MatcherObject<Custom> | ((text: string) => MatcherObject<Custom>),
   nonMatchElement?: JSX.Element,
-  custom?: CustomMatcher
+  custom?: Custom
 ) {
-  const { parsedMatchers, matchInputs } = parse(matchers, text, custom);
+  const { parsedMatchers, matchInputs } = parse<Custom>(matchers, text, custom);
 
   const pattern = new RegExp(Object.keys(parsedMatchers).join("|"), "g");
 
@@ -26,7 +26,7 @@ function styled(
 
     const matchIndex = match.index!;
 
-    const wrapper = parsedMatchers[currentMatch];
+    const wrapper = parsedMatchers[currentMatch as keyof MatcherObject<Custom>];
 
     const chunk = text.substring(currentIndex, matchIndex);
 
